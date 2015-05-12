@@ -1,0 +1,112 @@
+In Docker, the WORKDIR instruction sets the working directory for which of the following DockerFile commands:
++ RUN, CMD and ENTRYPOINT
+- VLUME, CMD and ENV
+- EXPOSE, ENV and RUN
+
+The apt-package resource manages packages of _______________ platform(s).
+- Fedora and Debian
+- Debian and Ubuntu
++ Debian only
+- Redhat and Ubuntu
+
+Name the two major improvements in the latest Docker ver 0.9 release.
++ Execution Drivers and Libcontainer
+- Libcontainer and production quality
+- Production quality and execution drivers
+
+In chef, the chef-shell recipe runs in three modes. Select the one that is NOT one of the chef-shell modes:
+- Standalone
++ Server
+- Client
+- Solo
+
+In Docker, the two container states are running and exited. True or False?
++ True
+- False
+
+Name the two commands which cannot be triggered by ONBUILD docker command: 
+- USER and FROM
++ ENTRYPOINT and FROM
+- FROM and MAINTAINER
+
+In Chef, a knife data bag item is encrypted using which of the following methods?
++ Shared secret encryption
+- Asymmetric Encryption
+- Public Encryption
+
+In Chef, which file contains hints to the Chef server that enables cookbooks to be deployed in the right node.
+- chef-server.rb
++ metadata.rb
+- knife.rb
+
+What command is used for setting the Author field of generated images in Docker?
+- AUTHOR <name>
+- GENERATE <name>
++ MAINTAINER <name>
+
+A running process gets EAGAIN: Resource temporarily unavailable on reading a socket. How can you close this bad socket/file descriptor without killing the process?
+
+A careless sysadmin executes the following command: chmod 444 /bin/chmod - what do you do to fix this?
+
+I've lost my root password, what can I do?
+
+I've rebooted a remote server but after 10 minutes I'm still not able to ssh into it, what can be wrong?
+
+If you were stuck on a desert island with only 5 command-line utilities, which would you choose?
+
+You come across a random computer and it appears to be a command console for the universe. What is the first thing you type?
+
+Tell me about a creative way that you've used SSH?
+
+You have deleted by error a running script, what could you do to restore it?
+
+
+
+Explain Elastic Block Storage?  What type of performance can you expect?  How do you back it up?  How do you improve performance?
+EBS is a virtualized SAN or storage area network.  That means it is RAID storage to start with so it’s redundant and fault tolerant.  If disks die in that RAID you don’t lose data.  Great!  It is also virtualized, so you can provision and allocate storage, and attach it to your server with various API calls.  No calling the storage expert and asking him or her to run specialized commands from the hardware vendor.
+
+Performance on EBS can exhibit variability.  That is it can go above the SLA performance level, then drop below it.  The SLA provides you with an average disk I/O rate you can expect.  This can frustrate some folks especially performance experts who expect reliable and consistent disk throughput on a server.  Traditional physically hosted servers behave that way.  Virtual AWS instances do not.
+
+Backup EBS volumes by using the snapshot facility via API call or via a GUI interface like elasticfox.
+
+Improve performance by using Linux software raid and striping across four volumes.
+
+
+
+
+What is S3?  What is it used for? Should encryption be used?
+S3 stands for Simple Storage Service.  You can think of it like ftp storage, where you can move files to and from there, but not mount it like a filesystem.  AWS automatically puts your snapshots there, as well as AMIs there.  Encryption should be considered for sensitive data, as S3 is a proprietary technology developed by Amazon themselves, and as yet unproven vis-a-vis a security standpoint.
+
+
+
+
+What is an AMI?  How do I build one?
+AMI stands for Amazon Machine Image.  It is effectively a snapshot of the root filesystem.  Commodity hardware servers have a bios that points the the master boot record of the first block on a disk.  A disk image though can sit anywhere physically on a disk, so Linux can boot from an arbitrary location on the EBS storage network.
+
+Build a new AMI by first spinning up and instance from a trusted AMI.  Then adding packages and components as required.  Be wary of putting sensitive data onto an AMI.  For instance your access credentials should be added to an instance after spinup.  With a database, mount an outside volume that holds your MySQL data after spinup as well.
+
+
+
+Can I vertically scale an Amazon instance? How?
+Yes.  This is an incredible feature of AWS and cloud virtualization.  Spinup a new larger instance than the one you are currently running.  Pause that instance and detach the root ebs volume from this server and discard.  Then stop your live instance, detach its root volume.  Note the unique device ID and attach that root volume to your new server.   And the start it again.  Voila you have scaled vertically in-place!!
+
+
+
+What is auto-scaling? How does it work?
+Autoscaling is a feature of AWS which allows you to configure and automatically provision and spinup new instances without the need for your intervention.  You do this by setting thresholds and metrics to monitor.  When those thresholds are crossed a new instance of your choosing will be spun up, configured, and rolled into the load balancer pool.  Voila you’ve scaled horizontally without any operator intervention!
+
+
+What automation tools can I use to spinup servers?
+The most obvious way is to roll-your-own scripts, and use the AWS API tools.  Such scripts could be written in bash, perl or other language or your choice.  Next option is to use a configuration management and provisioning tool like puppet or better it’s successor Opscode Chef.  You might also look towards a tool like Scalr.  Lastly you can go with a managed solution such as Rightscale.
+
+
+
+What is configuration management?  Why would I want to use it with cloud provisioning of resources?
+Configuration management has been around for a long time in web operations and systems administration.  Yet the cultural popularity of it has been limited.  Most systems administrators configure machines as software was developed before version control – that is manually making changes on servers.  Each server can then and usually is slightly different.  Troubleshooting though is straightforward as you login to the box and operate on it directly.  Configuration management brings a large automation tool into the picture, managing servers like strings of a puppet.  This forces standardization, best practices, and reproducibility as all configs are versioned and managed.  It also introduces a new way of working which is the biggest hurdle to its adoption.
+
+Enter the cloud, and configuration management becomes even more critical.  That’s because virtual servers such as amazons EC2 instances are much less reliable than physical ones.  You absolutely need a mechanism to rebuild them as-is at any moment.  This pushes best practices like automation, reproducibility and disaster recovery into center stage.
+
+
+
+Explain how you would simulate perimeter security using Amazon Web Services model?
+Traditional perimeter security that we’re already familiar with using firewalls and so forth is not supported in the Amazon EC2 world.  AWS supports security groups.  One can create a security group for a jump box with ssh access – only port 22 open.  From there a webserver group and database group are created.  The webserver group allows 80 and 443 from the world, but port 22 *only* from the jump box group.  Further the database group allows port 3306 from the webserver group and port 22 from the jump box group.  Add any machines to the webserver group and they can all hit the database.  No one from the world can, and no one can directly ssh to any of your boxes.  Want to further lock this configuration down?  Only allow ssh access from specific IP addresses on your network, or allow just your subnet.
